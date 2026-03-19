@@ -1,4 +1,5 @@
 import io
+import pandas as pd
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from app.services.analyzer import analyze_csv
@@ -15,15 +16,17 @@ async def root():
 async def upload_csv(file: UploadFile):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Plik musi być w formacie CSV.")
-    result = analyze_csv(file.file)
+    df = pd.read_csv(file.file)
+    result = analyze_csv(df)
     return result
 
 @app.post("/clean")
 async def return_csv(file: UploadFile):
-    df = clean_csv(file.file)
+    df = pd.read_csv(file.file)
+    cleaned_df = clean_csv(df)
 
     stream = io.StringIO()
-    df.to_csv(stream, index=False)
+    cleaned_df.to_csv(stream, index=False)
     stream.seek(0)
 
     return StreamingResponse(

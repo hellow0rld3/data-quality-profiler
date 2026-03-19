@@ -1,8 +1,6 @@
 import pandas as pd
 
-def analyze_csv(file_stream):
-
-    df = pd.read_csv(file_stream)
+def analyze_csv(df):
     total_missing = int(df.isna().sum().sum())
     missing_per_column = df.isna().sum().to_dict()
     missing_per_column = {col: int(val) for col, val in missing_per_column.items()}
