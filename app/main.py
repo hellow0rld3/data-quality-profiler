@@ -23,7 +23,8 @@ async def upload_csv(file: UploadFile):
 @app.post("/clean")
 async def return_csv(file: UploadFile):
     df = pd.read_csv(file.file)
-    cleaned_df = clean_csv(df)
+    analysis = analyze_csv(df)
+    cleaned_df = clean_csv(df, analysis)
 
     stream = io.StringIO()
     cleaned_df.to_csv(stream, index=False)

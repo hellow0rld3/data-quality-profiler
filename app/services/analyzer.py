@@ -4,6 +4,7 @@ def analyze_csv(df):
     total_missing = int(df.isna().sum().sum())
     missing_per_column = df.isna().sum().to_dict()
     missing_per_column = {col: int(val) for col, val in missing_per_column.items()}
+    rows_with_missing_values = int(df.isna().any(axis=1).sum())
     total_duplicates = int(df.duplicated().sum())
     types_per_column = df.dtypes.astype(str).to_dict()
 
@@ -13,5 +14,8 @@ def analyze_csv(df):
         "brakujace_wartosci": total_missing,
         "zduplikowane_wiersze": total_duplicates,
         "braki w kolumnach" : missing_per_column,
+        "uszkodzone wiersze" : rows_with_missing_values,
         "typy kolumn" : types_per_column
     }
+
+
