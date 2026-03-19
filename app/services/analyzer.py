@@ -13,9 +13,9 @@ def analyze_csv(df):
         "nazwy_kolumn": list(df.columns),
         "brakujace_wartosci": total_missing,
         "zduplikowane_wiersze": total_duplicates,
-        "braki w kolumnach" : missing_per_column,
-        "uszkodzone wiersze" : rows_with_missing_values,
-        "typy kolumn" : types_per_column
+        "braki_w_kolumnach" : missing_per_column,
+        "uszkodzone_wiersze" : rows_with_missing_values,
+        "typy_kolumn" : types_per_column
     }
 
 

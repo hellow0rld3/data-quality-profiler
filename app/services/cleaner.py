@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
 
 def clean_csv(df, analysis_results):
     # drop all the duplicates
@@ -6,7 +8,7 @@ def clean_csv(df, analysis_results):
 
     # dropping all the rows with missing values if theres less then 3%
     # of them in the entire dataset
-    rows_with_missing_values = analysis_results.get("uszkodzone wiersze", 0) 
+    rows_with_missing_values = analysis_results.get("uszkodzone_wiersze", 0) 
     if len(df) > 0 and (rows_with_missing_values / len(df)) < 0.03:
         df.dropna(inplace=True)
 
@@ -41,5 +43,17 @@ def clean_csv(df, analysis_results):
     # Filling the rest (real text)
     final_string_cols = df.select_dtypes(exclude=['number']).columns
     df[final_string_cols] = df[final_string_cols].fillna("Brak_danych")
+
+    # Isolation Forest - Anomaly detection
+    numeric_data = df.select_dtypes(include=['number'])
     
+    if not numeric_data.empty:
+        # We need to scale the data so the chance for anomaly is equal in each column
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(numeric_data)
+        model = IsolationForest(contamination=0.03, random_state=42)
+        predictions = model.fit_predict(scaled_data)
+        # Adding a column labeling which rows have anomalies
+        df['outlier_IF'] = predictions == -1
+        
     return df
