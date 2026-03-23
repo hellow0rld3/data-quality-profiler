@@ -7,7 +7,7 @@ uploaded_file = st.file_uploader("Upload file", type=["csv"])
 
 if uploaded_file is not None:
     files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "text/csv")}
-    response = requests.post("http://127.0.0.1:8000/upload", files=files)
+    response = requests.post("https://data-profiler-api.onrender.com/upload", files=files)
     dane = response.json()
 
     col1, col2, col3 = st.columns(3)
@@ -25,7 +25,7 @@ if uploaded_file is not None:
 
     if st.button("Clean Data"):
         with st.spinner("Cleaning and hunting anomalies..."):
-            response2 = requests.post("http://127.0.0.1:8000/clean", files=files)
+            response2 = requests.post("https://data-profiler-api.onrender.com/clean", files=files)
             cleaned_data = response2.content
 
             st.download_button(
