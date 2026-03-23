@@ -5,3 +5,4 @@ scikit-learn
 python-multipart
 streamlit
 requests
+altair<5
